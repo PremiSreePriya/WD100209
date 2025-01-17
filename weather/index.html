@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter city name" spellcheck="false">
+            <button><img src="images/search.png" alt="Search"></button>
+        </div>
+        <div class="error" style="display: none;">
+            <p>Invalid city name. Please try again.</p>
+        </div>
+        <div class="weather" style="display: none;">
+            <img src="images/default.png" class="weather-icon" alt="Weather Icon">
+            <h1 class="temp"></h1>
+            <h2 class="city"></h2>
+            <div class="details">
+                <div class="col">
+                    <img src="images/humidity.png" alt="Humidity Icon">
+                    <div>
+                        <p class="humidity"></p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="images/wind.png" alt="Wind Icon">
+                    <div>
+                        <p class="wind"></p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const mockData = {
+            "New York": { temp: 22, humidity: 50, wind: 15, weather: "Rain" },
+            "London": { temp: 18, humidity: 60, wind: 10, weather: "Clouds" },
+            "Paris": { temp: 25, humidity: 45, wind: 20, weather: "Clear" },
+            "Tokyo": { temp: 30, humidity: 70, wind: 12, weather: "Mist" },
+            "Sydney": { temp: 28, humidity: 55, wind: 18, weather: "Drizzle" }
+        };
+
+      
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+        const errorBox = document.querySelector(".error");
+        const weatherBox = document.querySelector(".weather");
+
+        
+        function checkWeather(city) {
+            const data = mockData[city];
+            if (!data) {
+                // Show error message if city not found
+                errorBox.style.display = "block";
+                weatherBox.style.display = "none";
+            } else {
+                // Populate weather details
+                document.querySelector(".city").textContent = city;
+                document.querySelector(".temp").textContent = data.temp + "°C";
+                document.querySelector(".humidity").textContent = data.humidity + "%";
+                document.querySelector(".wind").textContent = data.wind + " km/h";
+
+                // Update weather icon based on the condition
+                if (data.weather === "Clouds") {
+                    weatherIcon.src = "images/clouds.png";
+                } else if (data.weather === "Clear") {
+                    weatherIcon.src = "images/clear.png";
+                } else if (data.weather === "Rain") {
+                    weatherIcon.src = "images/rain.png";
+                } else if (data.weather === "Drizzle") {
+                    weatherIcon.src = "images/drizzle.png";
+                } else if (data.weather === "Mist") {
+                    weatherIcon.src = "images/mist.png";
+                } else {
+                    weatherIcon.src = "images/default.png";
+                }
+
+                // Show weather details
+                weatherBox.style.display = "block";
+                errorBox.style.display = "none";
+            }
+        }
+
+        // Event listener for search button
+        searchBtn.addEventListener("click", () => {
+            const city = searchBox.value.trim();
+            if (city) {
+                checkWeather(city);
+            } else {
+                errorBox.style.display = "block";
+                errorBox.querySelector("p").textContent = "Please enter a city name.";
+                weatherBox.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
+
